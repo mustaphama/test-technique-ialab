@@ -1,0 +1,10 @@
+- Faire deux dossiers bien séparés (un pour le front et un pour le back) pour pas tout mélanger dans le code
+- Préparer le fichier docker-compose.yml pour pouvoir lancer les deux parties d'un coup avec juste une commande
+- Cacher la clé API dans un fichier .env pour éviter de faire l'erreur de la push en public sur Git
+- Faire un petit script avec une librairie Python pour réussir à lire et extraire le texte brut des PDF
+- Bidouiller le prompt pour obliger l'IA à me répondre exactement avec le format JSON demandé et vérifie s'il est correct
+- Créer la route API avec FastAPI qui va s'occuper de recevoir le fichier et de parler avec le LLM
+- Coder une interface rapide avec Streamlit avec un glisser-déposer pour que l'utilisateur puisse envoyer son fichier au back
+- Récupérer le JSON généré et l'afficher de façon plus jolie et lisible sur la page web
+- Rajouter un peu de gestion d'erreurs au cas où le PDF est illisible ou si l'API plante
+- Faire pas mal de tests à la fin avec plusieurs PDF différents pour être sûr que tout tourne bien avant de rendre le projet
