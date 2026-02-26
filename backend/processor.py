@@ -2,16 +2,36 @@ import fitz
 import json
 import os
 from mistralai import Mistral
+import pytesseract
+from PIL import Image
 
 # Initialisation du client Mistral
 client = Mistral(api_key=os.getenv("MISTRAL_API_KEY"))
 
 async def extract_text(file_bytes: bytes) -> str:
-    """extrait le texte brut du fichier PDF."""
+    """extrait le texte brut du fichier PDF, avec fallback OCR si scanné"""
     doc = fitz.open(stream=file_bytes, filetype="pdf")
     text = ""
+    
+    # on essaie d'extraire le texte normalement
     for page in doc:
         text += page.get_text()
+        
+    # si vide, on lance l'OCR
+    if len(text.strip()) < 50:
+        print("Document scanné détecté. Lancement de l'OCR...")
+        text = ""
+        for page in doc:
+            # augmentation de la résolution pour l'OCR
+            zoom_matrix = fitz.Matrix(2, 2) 
+            pix = page.get_pixmap(matrix=zoom_matrix)
+            
+            # conversion en image PIL pour pytesseract
+            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+            
+            # extraction du texte de l'image
+            text += pytesseract.image_to_string(img, lang="fra+eng") + "\n"
+            
     return text
 
 def analyze_with_llm(text: str) -> dict:
